@@ -5,11 +5,25 @@ import ContactList from './ContactList';
 import styles from './App.module.css';
 import Filter from "./Filter/Filter";
 
+const STORAGE_KEY = 'contacts';
+
 export default class App extends Component {
   state = {
     contacts: [],
     filter: ''
   };
+
+  componentDidMount() {
+    if (localStorage.getItem(STORAGE_KEY)) {
+      this.setState({contacts: JSON.parse(localStorage.getItem(STORAGE_KEY))});
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state.contacts));
+    }
+  }
 
   onChange = (event) => {
     const { value } = event.target;
